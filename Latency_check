@@ -1,0 +1,30 @@
+import time
+import socket
+
+def measure_latency(hostname="8.8.8.8", port=53):
+    """
+    Measures the round-trip latency to a remote server (default: Google's DNS 8.8.8.8).
+    Returns the latency in milliseconds.
+    """
+    start_time = time.time()  # Capture start time
+
+    
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        try:
+            s.connect((hostname, port))  # Connect to the server
+            end_time = time.time()  # Capture end time once connection is established
+        except Exception as e:
+            print(f"Error: {e}")
+            return None  # Return None if connection fails
+
+    
+    latency = (end_time - start_time) * 1000  # Convert to milliseconds
+    return latency
+
+
+if __name__ == "__main__":
+    latency = measure_latency()  # Measure latency to 8.8.8.8
+    if latency is not None:
+        print(f"Latency to 8.8.8.8: {latency:.2f} ms")  # Print the latency result
+    else:
+        print("Failed to measure latency.")
